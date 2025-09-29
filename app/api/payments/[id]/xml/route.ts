@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { generatePain001 } from "@/lib/xml/generator";
+import { ISO20022Generator } from "@/lib/xml/generator";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,7 @@ export async function GET(
   const p = await prisma.payment.findUnique({ where: { id } });
   if (!p) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const xml = generatePain001(p);
+  const xml = ISO20022Generator.generatePain001(p);
   return new NextResponse(xml, {
     status: 200,
     headers: {

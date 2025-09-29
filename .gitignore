@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+
+# production
+/.next
+/out
+
+# env
+.env
+
+# database
+*.db
+.prisma
+
+# misc
+.DS_Store
+

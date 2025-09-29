@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Payment {
+  id              String    @id @default(cuid())
+  uetr            String    @unique
+  rail            String
+  amount          Float
+  currency        String
+  debtorName      String
+  debtorAccount   String
+  creditorName    String
+  creditorAccount String
+  purpose         String?
+  remittance      String?
+  status          String    @default("CREATED")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  pain001Xml      String?
+  pacs008Xml      String?
+  events          Event[]
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  paymentId   String
+  type        String
+  description String
+  metadata    String?
+  createdAt   DateTime @default(now())
+  payment     Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  @@index([paymentId])
+}

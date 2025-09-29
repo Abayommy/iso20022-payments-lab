@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { ISO20022Generator } from "@/lib/xml/generator";
+import { ISO20022Generator, PaymentData } from "@/lib/xml/generator";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,21 @@ export async function GET(
   const p = await prisma.payment.findUnique({ where: { id } });
   if (!p) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const xml = ISO20022Generator.generatePain001(p);
+  // Transform Prisma payment to PaymentData format
+  const paymentData: PaymentData = {
+    paymentId: p.id,
+    amount: p.amount,
+    currency: p.currency,
+    debtorName: p.debtorName,
+    debtorAccountId: p.debtorAccount,
+    creditorName: p.creditorName,
+    creditorAccountId: p.creditorAccount,
+    paymentRail: p.rail as 'FEDNOW' | 'RTP' | 'SWIFT',
+    remittanceInfo: p.remittance || '',
+    timestamp: p.createdAt.toISOString()
+  };
+
+  const xml = ISO20022Generator.generatePain001(paymentData);
   return new NextResponse(xml, {
     status: 200,
     headers: {
@@ -21,4 +35,3 @@ export async function GET(
     }
   });
 }
-

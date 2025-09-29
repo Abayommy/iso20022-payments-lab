@@ -18,7 +18,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function Combobox(props) {
+interface ComboboxOption {
+  value: string
+  label: string
+  account?: string
+}
+
+interface ComboboxProps {
+  options?: ComboboxOption[]
+  value?: string
+  onValueChange: (label: string, account?: string) => void
+  placeholder?: string
+  searchPlaceholder?: string
+  emptyText?: string
+  allowCustom?: boolean
+}
+
+export function Combobox(props: ComboboxProps) {
   const {
     options = [],
     value = "",
@@ -37,7 +53,7 @@ export function Combobox(props) {
     return selectedOption ? selectedOption.label : value
   }, [options, value])
 
-  const handleSelect = (selectedValue) => {
+  const handleSelect = (selectedValue: string) => {
     const selectedOption = options.find((option) => option.value === selectedValue)
     if (selectedOption) {
       onValueChange(selectedOption.label, selectedOption.account)

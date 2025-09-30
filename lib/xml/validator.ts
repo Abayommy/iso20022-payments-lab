@@ -42,3 +42,44 @@ export class ISO20022Validator {
       });
       return { valid: false, errors, warnings };
     }
+
+    // Validate amount
+    if (payment.amount > rules.maxAmount) {
+      errors.push({
+        code: 'AMOUNT_EXCEEDS_LIMIT',
+        field: 'amount',
+        message: `Amount exceeds ${rail} limit of ${rules.maxAmount}`,
+        severity: 'CRITICAL'
+      });
+    }
+
+    // Validate required fields
+    for (const field of rules.requiredFields) {
+      if (!payment[field]) {
+        errors.push({
+          code: 'MISSING_REQUIRED_FIELD',
+          field,
+          message: `Required field ${field} is missing`,
+          severity: 'CRITICAL'
+        });
+      }
+    }
+
+    // Validate currency
+    if (!rules.supportedCurrencies.includes(payment.currency)) {
+      errors.push({
+        code: 'UNSUPPORTED_CURRENCY',
+        field: 'currency',
+        message: `Currency ${payment.currency} not supported for ${rail}`,
+        severity: 'CRITICAL'
+      });
+    }
+
+    // Return final validation result
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
+}

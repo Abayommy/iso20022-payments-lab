@@ -10,7 +10,7 @@ async function main() {
         debtorAcct: "US00ACME0001",
         creditorName: "Globex LLC",
         creditorAcct: "US00GLOBEX0001",
-        amount: "1250.55",
+        amount: 1250.55,
         currency: "USD",
         remittance: "Invoice #1001",
         purpose: "GDDS",
@@ -21,7 +21,7 @@ async function main() {
         debtorAcct: "US00WAYNE0002",
         creditorName: "Stark Industries",
         creditorAcct: "US00STARK0002",
-        amount: "420.00",
+        amount: 420.00,
         currency: "USD",
         remittance: "PO 77-ALPHA",
         purpose: "TRAD",
@@ -32,7 +32,7 @@ async function main() {
         debtorAcct: "GB00BLUESUN3",
         creditorName: "Tyrell Corp",
         creditorAcct: "DE00TYRELL03",
-        amount: "9999.99",
+        amount: 9999.99,
         currency: "EUR",
         remittance: "Settlement",
         purpose: "GDDS",
@@ -59,4 +59,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

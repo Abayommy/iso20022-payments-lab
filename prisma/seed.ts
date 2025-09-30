@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+kimport { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -43,14 +43,7 @@ async function main() {
     ],
   });
 
-  await prisma.event.create({
-    data: {
-      type: "seed",
-      payload: { inserted: 3, at: new Date().toISOString() },
-    },
-  });
-
-  console.log("Seed completed ✓");
+  console.log("Seed completed - 3 payments created ✓");
 }
 
 main()

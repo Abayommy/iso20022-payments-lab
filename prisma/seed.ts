@@ -41,7 +41,6 @@ async function main() {
         purpose: "GDDS",
       },
     ],
-    skipDuplicates: true,
   });
 
   await prisma.event.create({

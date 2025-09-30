@@ -77,7 +77,7 @@ export function Combobox(props: ComboboxProps) {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
+      <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput 
             placeholder={searchPlaceholder}
@@ -91,7 +91,7 @@ export function Combobox(props: ComboboxProps) {
                   className="px-2 py-2 cursor-pointer hover:bg-gray-100 rounded-sm"
                   onClick={() => handleSelect(searchValue)}
                 >
-                  Use "{searchValue}"
+                  Use &quot;{searchValue}&quot;
                 </div>
               ) : (
                 emptyText

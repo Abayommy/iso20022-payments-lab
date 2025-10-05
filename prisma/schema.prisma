@@ -1,8 +1,7 @@
 datasource db {
-  provider = "postgresql"  // Change from "sqlite"
-  url      = env("POSTGRES_PRISMA_URL")  // Change from DATABASE_URL
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")  // Use pooled for app runtime
 }
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,6 +23,7 @@ model Payment {
   pain001Xml      String?
   pacs008Xml      String?
   createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt @default(now())
   events          Event[]
 }
 

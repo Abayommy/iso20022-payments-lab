@@ -115,7 +115,6 @@ export default function PaymentsPage() {
     ? payments 
     : payments.filter(p => p.status === selectedFilter);
 // Auto-progress effect
-  // Auto-progress effect
   useEffect(() => {
     if (!testSettings.autoProgress) return;
 
@@ -130,7 +129,7 @@ export default function PaymentsPage() {
         
         // Check if we should pause
         if (testSettings.pauseAtStatus) {
-          const hasPaymentAtPauseStatus = currentPayments.some(p => p.status === testSettings.pauseAtStatus);
+          const hasPaymentAtPauseStatus = currentPayments.some((p: Payment) => p.status === testSettings.pauseAtStatus);
           if (hasPaymentAtPauseStatus) {
             return; // Don't advance if there's a payment at pause status
           }

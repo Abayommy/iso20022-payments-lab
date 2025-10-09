@@ -114,7 +114,38 @@ export default function PaymentsPage() {
   const filteredPayments = selectedFilter === 'All' 
     ? payments 
     : payments.filter(p => p.status === selectedFilter);
+// Auto-progress effect
+  // Auto-progress effect
+  useEffect(() => {
+    if (!testSettings.autoProgress) return;
 
+    const baseInterval = 5000; // 5 seconds base
+    const interval = baseInterval / testSettings.progressSpeed;
+
+    const autoAdvance = async () => {
+      // Fetch current payments to check pause status
+      try {
+        const response = await fetch('/api/payments');
+        const currentPayments = await response.json();
+        
+        // Check if we should pause
+        if (testSettings.pauseAtStatus) {
+          const hasPaymentAtPauseStatus = currentPayments.some(p => p.status === testSettings.pauseAtStatus);
+          if (hasPaymentAtPauseStatus) {
+            return; // Don't advance if there's a payment at pause status
+          }
+        }
+
+        // Call the batch advance endpoint
+        await fetch('/api/payments/batch/advance', { method: 'POST' });
+      } catch (error) {
+        console.error('Auto-advance error:', error);
+      }
+    };
+
+    const timer = setInterval(autoAdvance, interval);
+    return () => clearInterval(timer);
+  }, [testSettings.autoProgress, testSettings.progressSpeed, testSettings.pauseAtStatus]);
   const filters = ['All', 'CREATED', 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'];
 
   return (

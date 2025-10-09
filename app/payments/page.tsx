@@ -208,25 +208,41 @@ export default function PaymentsPage() {
               <h4 className="font-medium mb-3">Quick Actions</h4>
               <div className="space-y-2">
                 <button
-                  onClick={() => payments.forEach(p => {
-                    if (p.status !== 'COMPLETED' && p.status !== 'FAILED') {
-                      updatePaymentStatus(p.id, 'advance');
+                  onClick={async () => {
+                    const response = await fetch('/api/payments/batch/advance', { method: 'POST' });
+                    const data = await response.json();
+                    if (data.success) {
+                      fetchPayments();
+                      alert(`Advanced ${data.updated} payment(s)`);
                     }
-                  })}
+                  }}
                   className="w-full px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                 >
                   Advance All Payments
                 </button>
                 <button
-                  onClick={() => payments.forEach(p => updatePaymentStatus(p.id, 'reset'))}
+                  onClick={async () => {
+                    const response = await fetch('/api/payments/batch/reset', { method: 'POST' });
+                    const data = await response.json();
+                    if (data.success) {
+                      fetchPayments();
+                      alert(`Reset ${data.reset} payment(s) to CREATED`);
+                    }
+                  }}
                   className="w-full px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                   Reset All to CREATED
                 </button>
                 <button
-                  onClick={() => {
-                    const randomPayment = payments.find(p => p.status === 'PROCESSING');
-                    if (randomPayment) updatePaymentStatus(randomPayment.id, 'fail');
+                  onClick={async () => {
+                    const response = await fetch('/api/payments/batch/fail-random', { method: 'POST' });
+                    const data = await response.json();
+                    if (data.success) {
+                      fetchPayments();
+                      alert(`Failed payment: ${data.payment.uetr}`);
+                    } else {
+                      alert(data.message || 'No payments available to fail');
+                    }
                   }}
                   className="w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                 >
